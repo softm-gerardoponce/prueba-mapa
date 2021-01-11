@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import Phaser from 'phaser';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import ScalePlugin from 'phaser3-rex-plugins/plugins/scale-plugin.js';
 
 
 @Component({
@@ -20,9 +22,20 @@ export class GameComponent implements OnInit {
       type: Phaser.AUTO,
       height: window.innerHeight,
       width: window.innerWidth,
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+      },
       backgroundColor: '#000000',
       scene: [ playGame, playLevel ],
-      parent: 'gameContainer',  
+      parent: 'gameContainer', 
+      plugins: {
+        global: [{
+            key: 'rexScale',
+            plugin: ScalePlugin,
+            start: true
+        }]
+    } 
     };
   }
 
@@ -33,7 +46,7 @@ export class GameComponent implements OnInit {
 
 class playGame  extends Phaser.Scene {
   gameOptions = {
-    colors: [0xffffff,0xff0000,0x00ff00,0x0000ff,0xffff00],
+    colors: [0xffffff],
     columns: 3,
     rows: 3,
     thumbWidth: 60,
@@ -50,6 +63,8 @@ class playGame  extends Phaser.Scene {
   scrollingMap:any;
   currentPage:any;
   pageSelectors:any;
+  reg:any = {};
+
 
   constructor() {
     super("PlayGame");
@@ -57,6 +72,8 @@ class playGame  extends Phaser.Scene {
 
   preload() {
     console.log('preload method');
+    this.load.plugin('rexscaleplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexscaleplugin.min.js', true);
+
     this.load.spritesheet("levelthumb", "assets/levelthumb.png", {
       frameWidth: 60,
       frameHeight: 60
@@ -67,6 +84,7 @@ class playGame  extends Phaser.Scene {
 
   create() {
     let { width, height } = this.sys.game.canvas;
+    var obj;
     this.stars = [];
     this.stars[0] = 0;
     this.canMove = true;
@@ -74,6 +92,7 @@ class playGame  extends Phaser.Scene {
     for(var l = 1; l < this.gameOptions.columns * this.gameOptions.rows * this.gameOptions.colors.length; l++){
         this.stars[l] = -1;
     }
+
     // this.savedData = localStorage.getItem(this.gameOptions.localStorageName) == null ? this.stars.toSt   () : localStorage.getItem(this.gameOptions.localStorageName);
     // this.stars = this.savedData.split(",");
     /*this.pageText = this.add.text(width / 2, 16, "Swipe to select level page (1 / " + this.gameOptions.colors.length + ")", {
@@ -94,6 +113,7 @@ class playGame  extends Phaser.Scene {
     var leftMargin = (width - rowLength) / 2 + this.gameOptions.thumbWidth / 2;
     var colHeight = this.gameOptions.thumbHeight * this.gameOptions.rows + this.gameOptions.spacing * (this.gameOptions.rows - 1);
     var topMargin = (height - colHeight) / 2 + this.gameOptions.thumbHeight / 2;
+
     for(var k = 0; k < this.gameOptions.colors.length; k++){
         for(var i = 0; i < this.gameOptions.columns; i++){
             for(var j = 0; j < this.gameOptions.rows; j++){
@@ -152,10 +172,10 @@ class playGame  extends Phaser.Scene {
               if(item.texture.key == "levelthumb"){
                   var boundingBox = item.getBounds();
                   if(Phaser.Geom.Rectangle.Contains(boundingBox, pointer.x, pointer.y) && item.frame.name > 0){
-                      this.scene.start("PlayLevel", {
-                          level: item.levelNumber,
-                          stars: this.stars
-                      });
+                    //
+                    obj = this.add.text(pointer.x, pointer.y, "PRUEBA");
+                    this.plugins.get('rexScale').popup(obj, 1000).once('complete', function () { console.log('popup') })
+                    //
                   }
               }
           }, this);
@@ -176,6 +196,49 @@ class playGame  extends Phaser.Scene {
 
   update() {
     console.log('update method');
+  }
+
+  createModals() {
+    //////// modal 4 //////////
+    this.reg.modal.createModal({
+              type:"modal4",
+              includeBackground: true,
+              modalCloseOnInput: true,
+    itemsArr: [
+                {
+                  type: "text",
+                      content: "Share the awesomeness!",
+                      fontFamily: "Luckiest Guy",
+                      fontSize: 42,
+                      color: "0xfb387c",
+                      offsetY: -80
+                },
+                {
+                      type: "image",
+                      content: "twitter",
+                      offsetY: 20,
+                      offsetX: 80,
+                      contentScale: 0.8,
+                      callback: function(){
+                         window.open("https://twitter.com/intent/tweet?text=Cool%20modals%20%40%20http%3A%2F%2Fcodepen.io%2Fnetgfx%2Fpen%2FbNLgaX", 'twitter');
+                      }
+              },
+                  {
+                      type: "image",
+                      content: "facebook",
+                      offsetY: 20,
+                      offsetX: -80,
+                      contentScale: 0.8,
+                      callback: function () {
+                          window.open("https://www.facebook.com/sharer.php?u=Cool%20modals%20%40%20http%3A%2F%2Fcodepen.io%2Fnetgfx%2Fpen%2FbNLgaX")
+                      }
+              }
+              ]
+     });
+  }
+
+  showModal4() {
+    this.reg.modal.showModal("modal4");
   }
 
   changePage(page){
@@ -207,13 +270,13 @@ class playGame  extends Phaser.Scene {
             this.canMove = true;
         }
     });
-}
+  }
 }
 
 
 class playLevel extends Phaser.Scene {
   constructor() {
-    super({ key: 'secondary' });
+    super({ key: 'playLevel' });
   }
 
   preload() {
@@ -222,6 +285,7 @@ class playLevel extends Phaser.Scene {
   }
 
   create() {
+    alert("escena de nivel");
     this.add.image(0,0,'tecno').setOrigin();
   }
 
