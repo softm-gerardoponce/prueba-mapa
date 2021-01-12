@@ -65,6 +65,8 @@ class playGame  extends Phaser.Scene {
   currentPage:any;
   pageSelectors:any;
   reg:any = {};
+  cursors:any;
+  character:any;
 
 
   constructor() {
@@ -74,7 +76,8 @@ class playGame  extends Phaser.Scene {
   preload() {
     console.log('preload method');
     this.load.plugin('rexscaleplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexscaleplugin.min.js', true);
-
+    
+    this.load.atlas('bot', 'assets/running_bot.png', 'assets/running_bot.json');
     this.load.spritesheet("levelthumb", "assets/levelthumb.png", {
       frameWidth: 60,
       frameHeight: 60
@@ -86,6 +89,52 @@ class playGame  extends Phaser.Scene {
 
   create() {
     let { width, height } = this.sys.game.canvas;
+    this.cursors = this.input.keyboard.createCursorKeys();
+    this.character = this.add.sprite(width / 2, height / 2, 'bot');
+    this.character.setOrigin(0.5, 0.5);
+    var framenames = this.textures.get('bot').getFrameNames();
+    console.log(framenames);
+    this.anims.create({
+      key: 'run',
+      frames: [{
+        key: 'bot',
+        frame: 'run00'
+      },{
+        key: 'bot',
+        frame: 'run01'
+      },{
+        key: 'bot',
+        frame: 'run02'
+      }, {
+        key: 'bot',
+        frame: 'run03'
+      },{
+        key: 'bot',
+        frame: 'run04'
+      }, {
+        key: 'bot',
+        frame: 'run05'
+      },{
+        key: 'bot',
+        frame: 'run06'
+      }, {
+        key: 'bot',
+        frame: 'run07'
+      },{
+        key: 'bot',
+        frame: 'run08'
+      }, {
+        key: 'bot',
+        frame: 'run09'
+      }],
+      frameRate: 13,
+      repeat: -1
+    });
+
+    this.character.play('run');
+
+
+
     var obj:any = undefined;
     var menu1:any;
     var menu2:any;
@@ -239,6 +288,18 @@ class playGame  extends Phaser.Scene {
 
   update() {
     console.log('update method');
+    if (this.cursors.left.isDown){
+        this.character.x -= 4 
+      }
+    else if (this.cursors.right.isDown){
+      this.character.x += 4 
+    }
+    if (this.cursors.up.isDown){
+      this.character.y -= 4 
+    }
+    else if (this.cursors.down.isDown){
+      this.character.y += 4   
+    }
   }
 
   createModals() {
