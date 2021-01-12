@@ -78,13 +78,15 @@ class playGame  extends Phaser.Scene {
       frameWidth: 60,
       frameHeight: 60
      });
+    this.load.image("menu", "assets/menu.png");
     this.load.image("levelpages", "assets/levelpages.png");
     this.load.image("transp", "assets/transp.png");
   }
 
   create() {
     let { width, height } = this.sys.game.canvas;
-    var obj;
+    var obj:any = undefined;
+    var despliega:boolean = false;
     this.stars = [];
     this.stars[0] = 0;
     this.canMove = true;
@@ -117,7 +119,10 @@ class playGame  extends Phaser.Scene {
     for(var k = 0; k < this.gameOptions.colors.length; k++){
         for(var i = 0; i < this.gameOptions.columns; i++){
             for(var j = 0; j < this.gameOptions.rows; j++){
-              var thumb = this.add.image(k * width + leftMargin + i * (this.gameOptions.thumbWidth + this.gameOptions.spacing), topMargin + j * (this.gameOptions.thumbHeight + 150), "levelthumb");
+              var x = Phaser.Math.RND.between(0, width);
+		          var y = Phaser.Math.RND.between(0, height);
+              //var thumb = this.add.image(k * width + leftMargin + i * (this.gameOptions.thumbWidth + this.gameOptions.spacing), topMargin + j * (this.gameOptions.thumbHeight + 150), "levelthumb");
+              var thumb = this.add.image(x, y, "levelthumb");
               thumb.setTint(this.gameOptions.colors[k]);
               thumb['levelNumber'] = k * (this.gameOptions.rows * this.gameOptions.columns) + j * this.gameOptions.columns + i;
               thumb['levelNumber'];
@@ -169,13 +174,24 @@ class playGame  extends Phaser.Scene {
       if(delta == 0){
           this.canMove = true;
           this.itemGroup.children.iterate(function(item){
+            if (despliega){
+              this.plugins.get('rexScale').scaleDownDestroy(obj, 1000)
+              obj = undefined;
+              despliega = false;
+            }
               if(item.texture.key == "levelthumb"){
                   var boundingBox = item.getBounds();
                   if(Phaser.Geom.Rectangle.Contains(boundingBox, pointer.x, pointer.y) && item.frame.name > 0){
                     //
-                    obj = this.add.text(pointer.x, pointer.y, "PRUEBA");
-                    this.plugins.get('rexScale').popup(obj, 1000).once('complete', function () { console.log('popup') })
+                    if (!despliega){
+                      //obj = this.add.rectangle(pointer.x, pointer.y, 50, 50, 0x00bcd4);
+                      obj = this.add.image(pointer.x, pointer.y, "menu");
+                      this.plugins.get('rexScale').popup(obj, 1000).once('complete', function () {
+                        despliega = true;
+                       })
+                    }
                     //
+                    
                   }
               }
           }, this);
@@ -278,7 +294,6 @@ class playLevel extends Phaser.Scene {
   constructor() {
     super({ key: 'playLevel' });
   }
-
   preload() {
     console.log('preload method');
     this.load.image('tecno', 'assets/tecno.jpeg');
