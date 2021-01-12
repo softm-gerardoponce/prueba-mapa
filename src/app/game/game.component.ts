@@ -47,7 +47,7 @@ export class GameComponent implements OnInit {
 
 class playGame  extends Phaser.Scene {
   gameOptions = {
-    colors: [0xffffff],
+    colors: [0xffffff, 0xaffccff, 0xfafcfff],
     columns: 4,
     rows: 2,
     thumbWidth: 60,
@@ -90,6 +90,7 @@ class playGame  extends Phaser.Scene {
     var menu1:any;
     var menu2:any;
     var menu3:any;
+    var rectangulo:any;
     var despliega:boolean = false;
     this.stars = [];
     this.stars[0] = 0;
@@ -132,7 +133,7 @@ class playGame  extends Phaser.Scene {
               thumb['levelNumber'];
               thumb.setFrame(parseInt(this.stars[thumb['levelNumber']]) + 1);
               this.itemGroup.add(thumb);
-              var levelText = this.add.text(thumb.x, thumb.y - 12, thumb['levelNumber'], {
+              var levelText = this.add.text(thumb.x, thumb.y - 12, thumb['levelNumber'] + 1, {
                         font: "24px Arial",
                         color: "#000000",
                 });
@@ -180,9 +181,10 @@ class playGame  extends Phaser.Scene {
           this.itemGroup.children.iterate(function(item){
             console.log("DESPLIEGA", despliega)
             if (despliega){
-              menu1.destroy()
-              menu2.destroy()
-              menu3.destroy()
+              menu1.destroy();
+              menu2.destroy();
+              menu3.destroy();
+              rectangulo.destroy();
               console.log("se destruyo objeto")
               this.plugins.get('rexScale').scaleDownDestroy(obj, 1000)
               obj = undefined;
@@ -194,19 +196,22 @@ class playGame  extends Phaser.Scene {
                     //
                     if (!despliega){
                       obj = this.add.group();
-                      menu1 = this.add.text(pointer.x + 20, pointer.y, 'Primero!', { fill: '#0f0' }).setInteractive().setVisible(false)
+                      rectangulo = this.add.rectangle(pointer.x + 10, pointer.y - 10, 100, 140, 0x000000).setVisible(false).setOrigin(0);
+                      menu1 = this.add.text(pointer.x + 20, pointer.y, 'Primero!', { fill: '#ffffff' }).setInteractive().setVisible(false)
                       .on('pointerdown', () => console.log("Primera opcion"))
-                      menu2 = this.add.text(pointer.x + 20, pointer.y + 50, 'Segundo!', { fill: '#0f0' }).setInteractive().setVisible(false)
+                      menu2 = this.add.text(pointer.x + 20, pointer.y + 50, 'Segundo!', { fill: '#ffffff' }).setInteractive().setVisible(false)
                       .on('pointerdown', () => console.log("Segunda opcion"))
-                      menu3 = this.add.text(pointer.x + 20, pointer.y + 100, 'Tercero!', { fill: '#0f0' }).setInteractive().setVisible(false)
+                      menu3 = this.add.text(pointer.x + 20, pointer.y + 100, 'Tercero!', { fill: '#ffffff' }).setInteractive().setVisible(false)
                       .on('pointerdown', () => console.log("Tercera opcion"))
                       //obj = this.add.image(pointer.x, pointer.y, "menu");
-                      obj.add(menu1.setVisible(true));
-                      obj.add(menu2.setVisible(true));
-                      obj.add(menu3.setVisible(true));
-                      this.plugins.get('rexScale').popup(obj, 1000).once('complete', function () {
+                      obj.add(menu1);
+                      obj.add(menu2);
+                      obj.add(menu3);
+                      obj.add(rectangulo);
+                      
+                      this.plugins.get('rexScale').popup(obj.setVisible(true), 1000).once('complete', function () {
                         despliega = true;
-                       })
+                      })
                     //    this.scene.start("playLevel", {
                     //     level: item.levelNumber,
                     //     stars: this.stars
