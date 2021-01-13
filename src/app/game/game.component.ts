@@ -26,6 +26,9 @@ export class GameComponent implements OnInit {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
       },
+      physics: {
+        default: 'arcade',
+    },
       backgroundColor: '#000000',
       scene: [ playGame, playLevel ],
       parent: 'gameContainer', 
@@ -76,8 +79,6 @@ class playGame  extends Phaser.Scene {
   preload() {
     console.log('preload method');
     this.load.plugin('rexscaleplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexscaleplugin.min.js', true);
-    
-    this.load.atlas('bot', 'assets/running_bot.png', 'assets/running_bot.json');
     this.load.spritesheet("levelthumb", "assets/levelthumb.png", {
       frameWidth: 60,
       frameHeight: 60
@@ -85,13 +86,15 @@ class playGame  extends Phaser.Scene {
     this.load.image("menu", "assets/menu.png");
     this.load.image("levelpages", "assets/levelpages.png");
     this.load.image("transp", "assets/transp.png");
+    this.load.atlas('bot', 'assets/running_bot.png', 'assets/running_bot.json');
   }
 
   create() {
     let { width, height } = this.sys.game.canvas;
     this.cursors = this.input.keyboard.createCursorKeys();
-    this.character = this.add.sprite(width / 2, height / 2, 'bot');
-    this.character.setOrigin(0.5, 0.5);
+    this.character = this.physics.add.sprite(width / 2, height / 2, 'bot');
+    this.character.setOrigin(0.5, 0.5).setDepth(1).setCollideWorldBounds(true);;
+    console.log(this.cursors)
     var framenames = this.textures.get('bot').getFrameNames();
     console.log(framenames);
     this.anims.create({
@@ -212,11 +215,18 @@ class playGame  extends Phaser.Scene {
       gameObject.startPosition = gameObject.x;
       gameObject.currentPosition = gameObject.x;
     });
+
+    this.input.on("pointermove", function(){
+    })
+
+
+
     this.input.on("drag", function(pointer, gameObject, dragX, dragY){
       if(dragX <= 10 && dragX >= -gameObject.width + width - 10){
           gameObject.x = dragX;
           var delta = gameObject.x - gameObject.currentPosition;
           gameObject.currentPosition = dragX;
+          console.log("GAME", gameObject.width, width, dragX, delta)
           this.itemGroup.children.iterate(function(item){
               item.x += delta;
           });
@@ -284,21 +294,24 @@ class playGame  extends Phaser.Scene {
           }
       }
     }, this);
+
   }
 
   update() {
     console.log('update method');
+    this.character.setVelocity(0);
+    let { width, height } = this.sys.game.canvas;
     if (this.cursors.left.isDown){
-        this.character.x -= 4 
-      }
+      this.character.setVelocityX(-300);
+    }
     else if (this.cursors.right.isDown){
-      this.character.x += 4 
+      this.character.setVelocityX(300);
     }
     if (this.cursors.up.isDown){
-      this.character.y -= 4 
+      this.character.setVelocityY(-300);
     }
     else if (this.cursors.down.isDown){
-      this.character.y += 4   
+      this.character.setVelocityY(300)
     }
   }
 
