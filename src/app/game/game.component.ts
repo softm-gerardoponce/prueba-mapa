@@ -28,7 +28,7 @@ export class GameComponent implements OnInit {
       },
       physics: {
         default: 'arcade',
-    },
+      },
       backgroundColor: '#000000',
       scene: [ playGame, playLevel ],
       parent: 'gameContainer', 
@@ -70,7 +70,14 @@ class playGame  extends Phaser.Scene {
   reg:any = {};
   cursors:any;
   character:any;
-
+  thumb:any;
+  
+  obj:any = undefined;
+  menu1:any;
+  menu2:any;
+  menu3:any;
+  rectangulo:any;
+  despliega:boolean = false;
 
   constructor() {
     super("PlayGame");
@@ -91,12 +98,15 @@ class playGame  extends Phaser.Scene {
 
   create() {
     let { width, height } = this.sys.game.canvas;
+    this.cameras.main.setBounds(0, 0, width, height);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.character = this.physics.add.sprite(width / 2, height / 2, 'bot');
-    this.character.setOrigin(0.5, 0.5).setDepth(1).setCollideWorldBounds(true);;
+    this.character.setOrigin(0.5, 0.5).setDepth(1).setCollideWorldBounds(true).setInteractive();
     console.log(this.cursors)
+    this.cameras.main.startFollow(this.character, true, 0.09, 0.09);
+    //this.cameras.main.setZoom(1.5)
     var framenames = this.textures.get('bot').getFrameNames();
-    console.log(framenames);
+    console.log("camara", this.cameras.main.eventNames())
     this.anims.create({
       key: 'run',
       frames: [{
@@ -135,15 +145,6 @@ class playGame  extends Phaser.Scene {
     });
 
     this.character.play('run');
-
-
-
-    var obj:any = undefined;
-    var menu1:any;
-    var menu2:any;
-    var menu3:any;
-    var rectangulo:any;
-    var despliega:boolean = false;
     this.stars = [];
     this.stars[0] = 0;
     this.canMove = true;
@@ -151,17 +152,6 @@ class playGame  extends Phaser.Scene {
     for(var l = 1; l < this.gameOptions.columns * this.gameOptions.rows * this.gameOptions.colors.length; l++){
         this.stars[l] = -1;
     }
-
-    // this.savedData = localStorage.getItem(this.gameOptions.localStorageName) == null ? this.stars.toSt   () : localStorage.getItem(this.gameOptions.localStorageName);
-    // this.stars = this.savedData.split(",");
-    /*this.pageText = this.add.text(width / 2, 16, "Swipe to select level page (1 / " + this.gameOptions.colors.length + ")", {
-      fontFamily: "Arial",
-      fontSize: '18px',
-      color: '#fff',
-      stroke: '#fff',
-      strokeThickness: 0,
-      align: "center",
-    });*/
     this.scrollingMap = this.add.tileSprite(0, 0, this.gameOptions.colors.length * width, height, "transp");
     this.scrollingMap.setInteractive();
     this.input.setDraggable(this.scrollingMap);
@@ -178,14 +168,15 @@ class playGame  extends Phaser.Scene {
             for(var j = 0; j < this.gameOptions.rows; j++){
               var x = Phaser.Math.RND.between(0, width);
 		          var y = Phaser.Math.RND.between(0, height);
-              var thumb = this.add.image(k * width + leftMargin + i * (this.gameOptions.thumbWidth + this.gameOptions.spacing), topMargin + j * (this.gameOptions.thumbHeight + 150), "levelthumb");
+              this.thumb = this.add.image(k * width + leftMargin + i * (this.gameOptions.thumbWidth + this.gameOptions.spacing), topMargin + j * (this.gameOptions.thumbHeight + 150), "levelthumb");
               //var thumb = this.add.image(x, y, "levelthumb");
-              thumb.setTint(this.gameOptions.colors[k]);
-              thumb['levelNumber'] = k * (this.gameOptions.rows * this.gameOptions.columns) + j * this.gameOptions.columns + i;
-              thumb['levelNumber'];
-              thumb.setFrame(parseInt(this.stars[thumb['levelNumber']]) + 1);
-              this.itemGroup.add(thumb);
-              var levelText = this.add.text(thumb.x, thumb.y - 12, thumb['levelNumber'] + 1, {
+              this.thumb.setTint(this.gameOptions.colors[k]);
+              this.thumb['levelNumber'] = k * (this.gameOptions.rows * this.gameOptions.columns) + j * this.gameOptions.columns + i;
+              this.thumb['levelNumber'];
+              this.thumb.setFrame(parseInt(this.stars[this.thumb['levelNumber']]) + 1);
+              this.thumb.setInteractive();
+              this.itemGroup.add(this.thumb);
+              var levelText = this.add.text(this.thumb.x, this.thumb.y - 12, this.thumb['levelNumber'] + 1, {
                         font: "24px Arial",
                         color: "#000000",
                 });
@@ -211,14 +202,57 @@ class playGame  extends Phaser.Scene {
           this.pageSelectors[k].scaleY = 0.5;
         }
     }
+
+
+    this.input.on("pointerdown", function(pointer, gameObject){
+          this.canMove = true;
+          this.itemGroup.children.iterate(function(item){
+            if (this.despliega){
+              this.menu1.destroy();
+              this.menu2.destroy();
+              this.menu3.destroy();
+              this.rectangulo.destroy();
+              this.plugins.get('rexScale').scaleDownDestroy(this.obj, 1000)
+              this.obj = undefined;
+              this.despliega = false;
+            }
+            //console.log("item", item.texture.key, despliega)
+              if(item.texture.key == "levelthumb"){
+                  var boundingBox = item.getBounds();
+                  if(Phaser.Geom.Rectangle.Contains(boundingBox, pointer.x, pointer.y) && item.frame.name > 0){
+                    //
+                    if (!this.despliega){
+                      this.obj = this.add.group();
+                      this.rectangulo = this.add.rectangle(pointer.x + 10, pointer.y - 10, 100, 140, 0x000000).setVisible(false).setOrigin(0);
+                      this.menu1 = this.add.text(pointer.x + 20, pointer.y, 'Primero!', { fill: '#ffffff' }).setInteractive().setVisible(false)
+                      .on('pointerdown', () => console.log("Primera opcion"))
+                      this.menu2 = this.add.text(pointer.x + 20, pointer.y + 50, 'Segundo!', { fill: '#ffffff' }).setInteractive().setVisible(false)
+                      .on('pointerdown', () => console.log("Segunda opcion"))
+                      this.menu3 = this.add.text(pointer.x + 20, pointer.y + 100, 'Tercero!', { fill: '#ffffff' }).setInteractive().setVisible(false)
+                      .on('pointerdown', () => console.log("Tercera opcion"))
+                      //obj = this.add.image(pointer.x, pointer.y, "menu");
+                      this.obj.add(this.menu1);
+                      this.obj.add(this.menu2);
+                      this.obj.add(this.menu3);
+                      this.obj.add(this.rectangulo);
+                      this.plugins.get('rexScale').popup(this.obj.setVisible(true), 1000).once('complete', function () {
+                        this.despliega = true;
+                      })
+                    //    this.scene.start("playLevel", {
+                    //     level: item.levelNumber,
+                    //     stars: this.stars
+                    // });
+                    }
+                    //      
+                  }
+              }
+          }, this);
+    }, this);
+      
     this.input.on("dragstart", function(pointer, gameObject){
       gameObject.startPosition = gameObject.x;
       gameObject.currentPosition = gameObject.x;
     });
-
-    this.input.on("pointermove", function(){
-    })
-
 
 
     this.input.on("drag", function(pointer, gameObject, dragX, dragY){
@@ -226,51 +260,24 @@ class playGame  extends Phaser.Scene {
           gameObject.x = dragX;
           var delta = gameObject.x - gameObject.currentPosition;
           gameObject.currentPosition = dragX;
-          console.log("GAME", gameObject.width, width, dragX, delta)
+          //console.log("GAME", gameObject.width, width, dragX, delta)
           this.itemGroup.children.iterate(function(item){
               item.x += delta;
           });
       }
     }, this);
+
     this.input.on("dragend", function(pointer, gameObject){
       this.canMove = false;
       var delta = gameObject.startPosition - gameObject.x;
       if(delta == 0){
           this.canMove = true;
           this.itemGroup.children.iterate(function(item){
-            console.log("DESPLIEGA", despliega)
-            if (despliega){
-              menu1.destroy();
-              menu2.destroy();
-              menu3.destroy();
-              rectangulo.destroy();
-              console.log("se destruyo objeto")
-              this.plugins.get('rexScale').scaleDownDestroy(obj, 1000)
-              obj = undefined;
-              despliega = false;
-            }
               if(item.texture.key == "levelthumb"){
                   var boundingBox = item.getBounds();
                   if(Phaser.Geom.Rectangle.Contains(boundingBox, pointer.x, pointer.y) && item.frame.name > 0){
                     //
-                    if (!despliega){
-                      obj = this.add.group();
-                      rectangulo = this.add.rectangle(pointer.x + 10, pointer.y - 10, 100, 140, 0x000000).setVisible(false).setOrigin(0);
-                      menu1 = this.add.text(pointer.x + 20, pointer.y, 'Primero!', { fill: '#ffffff' }).setInteractive().setVisible(false)
-                      .on('pointerdown', () => console.log("Primera opcion"))
-                      menu2 = this.add.text(pointer.x + 20, pointer.y + 50, 'Segundo!', { fill: '#ffffff' }).setInteractive().setVisible(false)
-                      .on('pointerdown', () => console.log("Segunda opcion"))
-                      menu3 = this.add.text(pointer.x + 20, pointer.y + 100, 'Tercero!', { fill: '#ffffff' }).setInteractive().setVisible(false)
-                      .on('pointerdown', () => console.log("Tercera opcion"))
-                      //obj = this.add.image(pointer.x, pointer.y, "menu");
-                      obj.add(menu1);
-                      obj.add(menu2);
-                      obj.add(menu3);
-                      obj.add(rectangulo);
-                      
-                      this.plugins.get('rexScale').popup(obj.setVisible(true), 1000).once('complete', function () {
-                        despliega = true;
-                      })
+                   
                     //    this.scene.start("playLevel", {
                     //     level: item.levelNumber,
                     //     stars: this.stars
@@ -278,7 +285,7 @@ class playGame  extends Phaser.Scene {
                     }
                     //
                     
-                  }
+                  
               }
           }, this);
       }
@@ -302,10 +309,10 @@ class playGame  extends Phaser.Scene {
     this.character.setVelocity(0);
     let { width, height } = this.sys.game.canvas;
     if (this.cursors.left.isDown){
-      this.character.setVelocityX(-300);
+      this.character.setAngle(0).setVelocityX(-300);
     }
     else if (this.cursors.right.isDown){
-      this.character.setVelocityX(300);
+      this.character.setAngle(300).setVelocityX(300);
     }
     if (this.cursors.up.isDown){
       this.character.setVelocityY(-300);
@@ -313,6 +320,56 @@ class playGame  extends Phaser.Scene {
     else if (this.cursors.down.isDown){
       this.character.setVelocityY(300)
     }
+
+    if(Phaser.Geom.Intersects.RectangleToRectangle(this.character.getBounds(), this.itemGroup.getFirstAlive().getBounds())){
+      console.log("prueba")
+      this.menu()
+    }
+  }
+
+  menu(){
+    this.canMove = true;
+          this.itemGroup.children.iterate(function(item){
+            if (this.despliega){
+              this.menu1.destroy();
+              this.menu2.destroy();
+              this.menu3.destroy();
+              this.rectangulo.destroy();
+              this.plugins.get('rexScale').scaleDownDestroy(this.obj, 1000)
+              this.obj = undefined;
+              this.despliega = false;
+            }
+            //console.log("item", item.texture.key, despliega)
+              if(item.texture.key == "levelthumb"){
+                  var boundingBox = item.getBounds();
+                  if(Phaser.Geom.Rectangle.Contains(boundingBox, this.character.x, this.character.y) && item.frame.name > 0){
+                    //
+                    if (!this.despliega){
+                      this.obj = this.add.group();
+                      this.rectangulo = this.add.rectangle(this.character.x + 10, this.character.y - 10, 100, 140, 0x000000).setVisible(false).setOrigin(0);
+                      this.menu1 = this.add.text(this.character.x + 20, this.character.y, 'Primero!', { fill: '#ffffff' }).setInteractive().setVisible(false)
+                      .on('pointerdown', () => console.log("Primera opcion"))
+                      this.menu2 = this.add.text(this.character.x + 20, this.character.y + 50, 'Segundo!', { fill: '#ffffff' }).setInteractive().setVisible(false)
+                      .on('pointerdown', () => console.log("Segunda opcion"))
+                      this.menu3 = this.add.text(this.character.x + 20, this.character.y + 100, 'Tercero!', { fill: '#ffffff' }).setInteractive().setVisible(false)
+                      .on('pointerdown', () => console.log("Tercera opcion"))
+                      //obj = this.add.image(pointer.x, pointer.y, "menu");
+                      this.obj.add(this.menu1);
+                      this.obj.add(this.menu2);
+                      this.obj.add(this.menu3);
+                      this.obj.add(this.rectangulo);
+                      this.plugins.get('rexScale').popup(this.obj.setVisible(true), 1000).once('complete', function () {
+                        this.despliega = true;
+                      })
+                    //    this.scene.start("playLevel", {
+                    //     level: item.levelNumber,
+                    //     stars: this.stars
+                    // });
+                    }
+                    //      
+                  }
+              }
+          }, this);
   }
 
   createModals() {
