@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import Phaser from 'phaser';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import ScalePlugin from 'phaser3-rex-plugins/plugins/scale-plugin.js';
-
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -82,6 +81,9 @@ class playGame extends Phaser.Scene {
 
   points: any = [];
   bmd: any;
+  detenido: boolean = false;
+  pointsX: any = [];
+  pointsY: any = [];
 
   constructor() {
     super('PlayGame');
@@ -294,6 +296,19 @@ class playGame extends Phaser.Scene {
     this.cameras.main.startFollow(this.character, true, 0.09, 0.09);
     this.character.play('run');
     this.cameras.main.setZoom(1.5);
+    console.log('puntos', this.points[0].x);
+
+    this.pointsX = this.points.map((a) => a.x);
+    this.pointsY = this.points.map((a) => a.y);
+
+    console.log('X');
+
+    for (var h = 0; h < this.points.length; h++) {
+      this.add
+        .circle(this.points[h].x, this.points[h].y, 4, 0x6666ff)
+        .setDepth(1);
+      console.log('x', this.points[h].x, 'y', this.points[h].y);
+    }
     // console.log('tasda', this.itemGroup.children);
     /// SECCION: INPUTS EVENTOS
 
@@ -301,8 +316,10 @@ class playGame extends Phaser.Scene {
       'pointerdown',
       function (pointer, gameObject) {
         if (this.character.isFollowing()) {
+          this.detenido = false;
           this.character.pauseFollow();
         } else {
+          this.detenido = false;
           this.character.resumeFollow();
         }
         this.canMove = true;
@@ -457,14 +474,42 @@ class playGame extends Phaser.Scene {
     //   this.character.setVelocityY(300);
     // }
 
+    console.log(
+      'COORDENDAS MUÑECO',
+      Math.trunc(this.character.x),
+      Math.trunc(this.character.y),
+      this.points
+    );
+    if (
+      (this.pointsX.includes(Math.trunc(this.character.x)) &&
+        this.pointsY.includes(Math.trunc(this.character.y)) &&
+        !this.detenido) ||
+      (this.pointsX.includes(Math.trunc(this.character.x) + 1) &&
+        this.pointsY.includes(Math.trunc(this.character.y) + 1) &&
+        !this.detenido) ||
+      (this.pointsX.includes(Math.trunc(this.character.x) - 1) &&
+        this.pointsY.includes(Math.trunc(this.character.y) - 1) &&
+        !this.detenido)
+    ) {
+      console.log('DETENIDO', this.character.x, this.character.y);
+      console.log(this.points);
+      this.character.pauseFollow();
+      this.detenido = true;
+    } else {
+      //console.log('AVANZA', this.character.x, this.character.y);
+    }
+    // console.log(this.character.x, this.character.y);
+
     if (
       Phaser.Geom.Intersects.RectangleToRectangle(
         this.character.getBounds(),
         this.itemGroup.getFirstAlive().getBounds()
       )
     ) {
+      //this.character.pauseFollow();
+      //this.itemGroup.remove(this.itemGroup.getFirstAlive);
       //this.menuCrear(this.desplegado);
-      console.log('desplegado', this.desplegado);
+      // console.log('desplegado', this.desplegado);
     } else {
     }
   }
