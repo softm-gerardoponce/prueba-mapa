@@ -71,6 +71,8 @@ class playGame extends Phaser.Scene {
   character: any;
   thumb: any;
 
+  scoreboard: any = {};
+
   obj: any = undefined;
   menu1: any;
   menu2: any;
@@ -78,6 +80,8 @@ class playGame extends Phaser.Scene {
   rectangulo: any;
   despliega: boolean = false;
   desplegado: boolean = false;
+
+  text: any;
 
   points: any = [];
   bmd: any;
@@ -293,9 +297,9 @@ class playGame extends Phaser.Scene {
       repeat: -1,
       rotateToPath: true,
     });
-    this.cameras.main.startFollow(this.character, true, 0.09, 0.09);
+    //this.cameras.main.startFollow(this.character, true, 0.09, 0.09);
     this.character.play('run');
-    this.cameras.main.setZoom(1.5);
+    //this.cameras.main.setZoom(1.5);
     console.log('puntos', this.points[0].x);
 
     this.pointsX = this.points.map((a) => a.x);
@@ -457,6 +461,39 @@ class playGame extends Phaser.Scene {
       },
       this
     );
+
+    const list = ['Gem Data:', ''];
+
+    this.character.setDataEnabled();
+    const text2 = this.add.text(30, 30, '', {
+      font: '16px Courier',
+    });
+
+    //  Whenever a data value is first set it will dispatch a setdata event
+    this.character.on('setdata', function (gameObject, key, value) {
+      list.push(key);
+      text2.setText(list);
+    });
+    this.character.data.set('name', 'Red Gem Stone');
+    this.character.data.set('level', 2);
+    this.character.data.set('owner', 'Link');
+    this.text = this.add.text(350, 250, '', {
+      font: '16px Courier',
+    });
+    //  Whenever a data value is updated it will dispatch a changedata event
+    this.character.on('changedata', function (gameObject, key, value) {
+      text.setText([
+        'Name: ' + this.character.data.get('name'),
+        'Level: ' + this.character.data.get('level'),
+        'Value: ' + this.character.data.get('gold') + ' gold',
+        'Owner: ' + this.character.data.get('owner'),
+      ]);
+    });
+
+    this.scoreboard = {
+      'Posicion X': this.character.x,
+      'Posicion Y': this.character.y,
+    };
   }
 
   update() {
@@ -473,6 +510,13 @@ class playGame extends Phaser.Scene {
     // } else if (this.cursors.down.isDown) {
     //   this.character.setVelocityY(300);
     // }
+
+    this.text.setText([
+      'Name: ' + this.character.data.get('name'),
+      'Level: ' + this.character.data.get('level'),
+      'Value: ' + this.character.x,
+      'Owner: ' + this.character.y,
+    ]);
 
     console.log(
       'COORDENDAS MUÑECO',
@@ -513,6 +557,8 @@ class playGame extends Phaser.Scene {
     } else {
     }
   }
+
+  entreRangos(x) {}
 
   menuCrear(desplegado) {
     if (!desplegado) {
