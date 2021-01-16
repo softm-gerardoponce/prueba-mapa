@@ -474,21 +474,10 @@ class playGame extends Phaser.Scene {
       list.push(key);
       text2.setText(list);
     });
-    this.character.data.set('name', 'Red Gem Stone');
-    this.character.data.set('level', 2);
-    this.character.data.set('owner', 'Link');
     this.text = this.add.text(350, 250, '', {
       font: '16px Courier',
     });
     //  Whenever a data value is updated it will dispatch a changedata event
-    this.character.on('changedata', function (gameObject, key, value) {
-      text.setText([
-        'Name: ' + this.character.data.get('name'),
-        'Level: ' + this.character.data.get('level'),
-        'Value: ' + this.character.data.get('gold') + ' gold',
-        'Owner: ' + this.character.data.get('owner'),
-      ]);
-    });
 
     this.scoreboard = {
       'Posicion X': this.character.x,
@@ -512,8 +501,8 @@ class playGame extends Phaser.Scene {
     // }
 
     this.text.setText([
-      'Name: ' + this.character.data.get('name'),
-      'Level: ' + this.character.data.get('level'),
+      'Name: ' + 'Robot',
+      'Level: ' + 1,
       'Value: ' + this.character.x,
       'Owner: ' + this.character.y,
     ]);
