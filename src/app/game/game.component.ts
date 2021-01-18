@@ -73,6 +73,7 @@ class playGame extends Phaser.Scene {
 
   scoreboard: any;
   dataScore: any;
+  circulos: any = [];
 
   obj: any = undefined;
   menu1: any;
@@ -285,7 +286,7 @@ class playGame extends Phaser.Scene {
       par = !par;
     }
     path.splineTo(this.points);
-    var graphics = this.add.graphics();
+    var graphics = this.add.graphics({ fillStyle: { color: 0x0000ff } });
 
     graphics.lineStyle(1, 0xffffff, 1); //what is 1, , 1
 
@@ -306,12 +307,18 @@ class playGame extends Phaser.Scene {
     this.pointsX = this.points.map((a) => a.x);
     this.pointsY = this.points.map((a) => a.y);
 
-    console.log('X');
-
     for (var h = 0; h < this.points.length; h++) {
-      this.add
-        .circle(this.points[h].x, this.points[h].y, 4, 0x6666ff)
-        .setDepth(1);
+      if (h % 2 == 0) {
+        new Phaser.Geom.Circle();
+        this.circulos.push(
+          new Phaser.Geom.Circle(this.points[h].x, this.points[h].y, 4)
+        );
+      } else {
+        this.circulos.push(
+          new Phaser.Geom.Circle(this.points[h].x, this.points[h].y, 4)
+        );
+      }
+      graphics.fillCircleShape(this.circulos[h]);
       console.log('x', this.points[h].x, 'y', this.points[h].y);
     }
     // console.log('tasda', this.itemGroup.children);
@@ -320,14 +327,10 @@ class playGame extends Phaser.Scene {
     this.input.on(
       'pointerdown',
       function (pointer, gameObject) {
-        if (this.character.isFollowing()) {
-          this.detenido = false;
-          this.character.pauseFollow();
-        } else {
-          this.detenido = false;
-          this.character.resumeFollow();
-        }
+        this.detenido = false;
+        this.character.resumeFollow();
         this.canMove = true;
+        console.log('detenido', this.detenido);
         this.itemGroup.children.iterate(function (item) {
           if (this.despliega) {
             this.menu1.destroy();
@@ -426,6 +429,7 @@ class playGame extends Phaser.Scene {
       'dragend',
       function (pointer, gameObject) {
         this.canMove = false;
+        console.log('dragend');
         var delta = gameObject.startPosition - gameObject.x;
         if (delta == 0) {
           this.canMove = true;
@@ -495,39 +499,90 @@ class playGame extends Phaser.Scene {
   }
 
   update() {
-    //console.log('update method');
-    // this.character.setVelocity(0);
-    // let { width, height } = this.sys.game.canvas;
-    // if (this.cursors.left.isDown) {
-    //   this.character.setAngle(0).setVelocityX(-300);
-    // } else if (this.cursors.right.isDown) {
-    //   this.character.setAngle(300).setVelocityX(300);
-    // }
-    // if (this.cursors.up.isDown) {
-    //   this.character.setVelocityY(-300);
-    // } else if (this.cursors.down.isDown) {
-    //   this.character.setVelocityY(300);
-    // }
-    // this.character.data.values.xpos = this.character.x;
-    // this.character.data.values.ypos = this.character.y;
     this.actualizarScore();
 
     if (
-      (this.pointsX.includes(Math.trunc(this.character.x)) &&
-        this.pointsY.includes(Math.trunc(this.character.y)) &&
-        !this.detenido) ||
-      (this.pointsX.includes(Math.trunc(this.character.x) + 1) &&
-        this.pointsY.includes(Math.trunc(this.character.y) + 1) &&
-        !this.detenido) ||
-      (this.pointsX.includes(Math.trunc(this.character.x) - 1) &&
-        this.pointsY.includes(Math.trunc(this.character.y) - 1) &&
-        !this.detenido)
+      Phaser.Geom.Circle.ContainsPoint(
+        this.circulos[1],
+        this.character.getCenter()
+      ) &&
+      !this.detenido
     ) {
       this.character.pauseFollow();
       this.detenido = true;
-    } else {
-      //console.log('AVANZA', this.character.x, this.character.y);
+      console.log('detenido', this.detenido);
     }
+    if (
+      Phaser.Geom.Circle.ContainsPoint(
+        this.circulos[2],
+        this.character.getCenter()
+      ) &&
+      !this.detenido
+    ) {
+      this.character.pauseFollow();
+      this.detenido = true;
+    }
+    if (
+      Phaser.Geom.Circle.ContainsPoint(
+        this.circulos[3],
+        this.character.getCenter()
+      ) &&
+      !this.detenido
+    ) {
+      this.character.pauseFollow();
+      this.detenido = true;
+    }
+    if (
+      Phaser.Geom.Circle.ContainsPoint(
+        this.circulos[4],
+        this.character.getCenter()
+      ) &&
+      !this.detenido
+    ) {
+      this.character.pauseFollow();
+      this.detenido = true;
+    }
+    if (
+      Phaser.Geom.Circle.ContainsPoint(
+        this.circulos[5],
+        this.character.getCenter()
+      ) &&
+      !this.detenido
+    ) {
+      this.character.pauseFollow();
+      this.detenido = true;
+    }
+    if (
+      Phaser.Geom.Circle.ContainsPoint(
+        this.circulos[6],
+        this.character.getCenter()
+      ) &&
+      !this.detenido
+    ) {
+      this.character.pauseFollow();
+      this.detenido = true;
+    }
+    if (
+      Phaser.Geom.Circle.ContainsPoint(
+        this.circulos[7],
+        this.character.getCenter()
+      ) &&
+      !this.detenido
+    ) {
+      this.character.pauseFollow();
+      this.detenido = true;
+    }
+    if (
+      Phaser.Geom.Circle.ContainsPoint(
+        this.circulos[8],
+        this.character.getCenter()
+      ) &&
+      !this.detenido
+    ) {
+      this.character.pauseFollow();
+      this.detenido = true;
+    }
+
     // console.log(this.character.x, this.character.y);
 
     if (
@@ -543,8 +598,6 @@ class playGame extends Phaser.Scene {
     } else {
     }
   }
-
-  entreRangos(x) {}
 
   menuCrear(desplegado) {
     if (!desplegado) {
