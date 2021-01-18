@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import Phaser from 'phaser';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import ScalePlugin from 'phaser3-rex-plugins/plugins/scale-plugin.js';
@@ -7,6 +7,7 @@ import ScalePlugin from 'phaser3-rex-plugins/plugins/scale-plugin.js';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css'],
 })
+
 export class GameComponent implements OnInit {
   width: number = 640;
   height: number = 900;
@@ -14,7 +15,11 @@ export class GameComponent implements OnInit {
   config: Phaser.Types.Core.GameConfig;
   scene: Phaser.Scene;
 
-  constructor() {
+  @ViewChild('content') content:any;
+
+  constructor(
+    private modalService: NgbModal
+  ) {
     this.config = {
       type: Phaser.AUTO,
       height: window.innerHeight,
@@ -45,6 +50,11 @@ export class GameComponent implements OnInit {
   ngOnInit() {
     this.game = new Phaser.Game(this.config);
   }
+
+  open(){
+    this.modalService.open(this.content);
+  }
+
 }
 
 class playGame extends Phaser.Scene {
