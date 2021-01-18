@@ -481,13 +481,13 @@ class playGame extends Phaser.Scene {
       'Pocision X: ' + this.character.data.get('xpos'),
       'Pocision y: ' + this.character.data.get('ypos'),
     ]);
-
+    //funcion que sirve para actualizar los valores cuando cambian
     this.character.on('changedata-xpos', function () {});
   }
 
   actualizarScore() {
     this.scoreboard.setText([
-      'Nombre:' + this.character.data.get('nombre'),
+      'Nombre: ' + this.character.data.get('nombre'),
       'Nivel: ' + this.character.data.get('nivel'),
       'Pocision X: ' + this.character.x,
       'Pocision y: ' + this.character.y,
@@ -508,8 +508,8 @@ class playGame extends Phaser.Scene {
     // } else if (this.cursors.down.isDown) {
     //   this.character.setVelocityY(300);
     // }
-    this.character.data.values.xpos = this.character.x;
-    this.character.data.values.ypos = this.character.y;
+    // this.character.data.values.xpos = this.character.x;
+    // this.character.data.values.ypos = this.character.y;
     this.actualizarScore();
 
     if (
