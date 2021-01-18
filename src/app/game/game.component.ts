@@ -84,6 +84,7 @@ class playGame extends Phaser.Scene {
   desplegado: boolean = false;
 
   text: any;
+  contadorNiveles: number = 0;
 
   points: any = [];
   bmd: any;
@@ -212,17 +213,16 @@ class playGame extends Phaser.Scene {
     for (var k = 0; k < this.gameOptions.colors.length; k++) {
       for (var i = 0; i < this.gameOptions.columns; i++) {
         for (var j = 0; j < this.gameOptions.rows; j++) {
-          var x = Phaser.Math.RND.between(0, width);
-          var y = Phaser.Math.RND.between(0, height);
-          this.thumb = this.add.image(x, y, 'levelthumb');
-          // this.thumb = this.add.image(
-          //   k * width +
-          //     leftMargin +
-          //     i * (this.gameOptions.thumbWidth + this.gameOptions.spacing),
-          //   topMargin + j * (this.gameOptions.thumbHeight + 150),
-          //   'levelthumb'
-          // );
-          //var thumb = this.add.image(x, y, "levelthumb");
+          //var x = Phaser.Math.RND.between(0, width);
+          //var y = Phaser.Math.RND.between(0, height);
+          //this.thumb = this.add.image(x, y, 'levelthumb');
+          this.thumb = this.add.image(
+            k * width +
+              leftMargin +
+              i * (this.gameOptions.thumbWidth + this.gameOptions.spacing),
+            topMargin + j * (this.gameOptions.thumbHeight + 150),
+            'levelthumb'
+          );
           this.thumb.setTint(this.gameOptions.colors[k]);
           this.thumb['levelNumber'] =
             k * (this.gameOptions.rows * this.gameOptions.columns) +
@@ -312,11 +312,11 @@ class playGame extends Phaser.Scene {
       if (h % 2 == 0) {
         new Phaser.Geom.Circle();
         this.circulos.push(
-          new Phaser.Geom.Circle(this.points[h].x, this.points[h].y, 2)
+          new Phaser.Geom.Circle(this.points[h].x, this.points[h].y, 1.25)
         );
       } else {
         this.circulos.push(
-          new Phaser.Geom.Circle(this.points[h].x, this.points[h].y, 2)
+          new Phaser.Geom.Circle(this.points[h].x, this.points[h].y, 1.25)
         );
       }
       graphics.fillCircleShape(this.circulos[h]);
@@ -469,7 +469,7 @@ class playGame extends Phaser.Scene {
     /// SCOREBOARD
     this.character.setDataEnabled();
     this.character.data.set('nombre', 'Gerardo Ponce');
-    this.character.data.set('nivel', '5');
+    this.character.data.set('nivel', 0);
     this.character.data.set('xpos', this.character.x);
     this.character.data.set('ypos', this.character.y);
 
@@ -498,6 +498,7 @@ class playGame extends Phaser.Scene {
   }
 
   update() {
+    this;
     this.actualizarScore();
 
     if (
@@ -509,7 +510,7 @@ class playGame extends Phaser.Scene {
     ) {
       this.character.pauseFollow();
       this.detenido = true;
-      console.log('detenido', this.detenido);
+      this.character.data.values.nivel++;
     }
     if (
       Phaser.Geom.Circle.ContainsPoint(
@@ -520,6 +521,7 @@ class playGame extends Phaser.Scene {
     ) {
       this.character.pauseFollow();
       this.detenido = true;
+      this.character.data.values.nivel++;
     }
     if (
       Phaser.Geom.Circle.ContainsPoint(
@@ -530,6 +532,7 @@ class playGame extends Phaser.Scene {
     ) {
       this.character.pauseFollow();
       this.detenido = true;
+      this.character.data.values.nivel++;
     }
     if (
       Phaser.Geom.Circle.ContainsPoint(
@@ -540,6 +543,7 @@ class playGame extends Phaser.Scene {
     ) {
       this.character.pauseFollow();
       this.detenido = true;
+      this.character.data.values.nivel++;
     }
     if (
       Phaser.Geom.Circle.ContainsPoint(
@@ -550,6 +554,7 @@ class playGame extends Phaser.Scene {
     ) {
       this.character.pauseFollow();
       this.detenido = true;
+      this.character.data.values.nivel++;
     }
     if (
       Phaser.Geom.Circle.ContainsPoint(
@@ -560,6 +565,7 @@ class playGame extends Phaser.Scene {
     ) {
       this.character.pauseFollow();
       this.detenido = true;
+      this.character.data.values.nivel++;
     }
     if (
       Phaser.Geom.Circle.ContainsPoint(
@@ -570,6 +576,7 @@ class playGame extends Phaser.Scene {
     ) {
       this.character.pauseFollow();
       this.detenido = true;
+      this.character.data.values.nivel++;
     }
     if (
       Phaser.Geom.Circle.ContainsPoint(
@@ -580,6 +587,7 @@ class playGame extends Phaser.Scene {
     ) {
       this.character.pauseFollow();
       this.detenido = true;
+      this.character.data.values.nivel++;
     }
 
     // console.log(this.character.x, this.character.y);
