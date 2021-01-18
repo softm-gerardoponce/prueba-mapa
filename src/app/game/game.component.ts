@@ -49,7 +49,7 @@ export class GameComponent implements OnInit {
 
 class playGame extends Phaser.Scene {
   gameOptions = {
-    colors: [0xffffff, 0xaffccff, 0xfafcfff],
+    colors: [0xffffff],
     columns: 4,
     rows: 2,
     thumbWidth: 60,
@@ -57,7 +57,7 @@ class playGame extends Phaser.Scene {
     spacing: 200,
     localStorageName: 'levelselect',
   };
-
+  //0xaffccff, 0xfafcfff
   stars: any = [];
   canMove: boolean;
   itemGroup: any;
@@ -214,13 +214,14 @@ class playGame extends Phaser.Scene {
         for (var j = 0; j < this.gameOptions.rows; j++) {
           var x = Phaser.Math.RND.between(0, width);
           var y = Phaser.Math.RND.between(0, height);
-          this.thumb = this.add.image(
-            k * width +
-              leftMargin +
-              i * (this.gameOptions.thumbWidth + this.gameOptions.spacing),
-            topMargin + j * (this.gameOptions.thumbHeight + 150),
-            'levelthumb'
-          );
+          this.thumb = this.add.image(x, y, 'levelthumb');
+          // this.thumb = this.add.image(
+          //   k * width +
+          //     leftMargin +
+          //     i * (this.gameOptions.thumbWidth + this.gameOptions.spacing),
+          //   topMargin + j * (this.gameOptions.thumbHeight + 150),
+          //   'levelthumb'
+          // );
           //var thumb = this.add.image(x, y, "levelthumb");
           this.thumb.setTint(this.gameOptions.colors[k]);
           this.thumb['levelNumber'] =
@@ -286,7 +287,7 @@ class playGame extends Phaser.Scene {
       par = !par;
     }
     path.splineTo(this.points);
-    var graphics = this.add.graphics({ fillStyle: { color: 0x0000ff } });
+    var graphics = this.add.graphics();
 
     graphics.lineStyle(1, 0xffffff, 1); //what is 1, , 1
 
@@ -311,11 +312,11 @@ class playGame extends Phaser.Scene {
       if (h % 2 == 0) {
         new Phaser.Geom.Circle();
         this.circulos.push(
-          new Phaser.Geom.Circle(this.points[h].x, this.points[h].y, 1)
+          new Phaser.Geom.Circle(this.points[h].x, this.points[h].y, 2)
         );
       } else {
         this.circulos.push(
-          new Phaser.Geom.Circle(this.points[h].x, this.points[h].y, 1)
+          new Phaser.Geom.Circle(this.points[h].x, this.points[h].y, 2)
         );
       }
       graphics.fillCircleShape(this.circulos[h]);
@@ -330,7 +331,6 @@ class playGame extends Phaser.Scene {
         this.detenido = false;
         this.character.resumeFollow();
         this.canMove = true;
-        console.log('detenido', this.detenido);
         this.itemGroup.children.iterate(function (item) {
           if (this.despliega) {
             this.menu1.destroy();
@@ -429,7 +429,6 @@ class playGame extends Phaser.Scene {
       'dragend',
       function (pointer, gameObject) {
         this.canMove = false;
-        console.log('dragend');
         var delta = gameObject.startPosition - gameObject.x;
         if (delta == 0) {
           this.canMove = true;
