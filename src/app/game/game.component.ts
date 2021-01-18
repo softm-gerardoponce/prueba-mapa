@@ -71,7 +71,8 @@ class playGame extends Phaser.Scene {
   character: any;
   thumb: any;
 
-  scoreboard: any = {};
+  scoreboard: any;
+  dataScore: any;
 
   obj: any = undefined;
   menu1: any;
@@ -462,27 +463,35 @@ class playGame extends Phaser.Scene {
       this
     );
 
-    const list = ['Gem Data:', ''];
-
+    /// SCOREBOARD
     this.character.setDataEnabled();
-    const text2 = this.add.text(30, 30, '', {
-      font: '16px Courier',
+    this.character.data.set('nombre', 'Gerardo Ponce');
+    this.character.data.set('nivel', '5');
+    this.character.data.set('xpos', this.character.x);
+    this.character.data.set('ypos', this.character.y);
+
+    this.scoreboard = this.add.text(width - 200, 0, '', {
+      font: '14px Courier',
+      color: '#00ff00',
     });
 
-    //  Whenever a data value is first set it will dispatch a setdata event
-    this.character.on('setdata', function (gameObject, key, value) {
-      list.push(key);
-      text2.setText(list);
-    });
-    this.text = this.add.text(350, 250, '', {
-      font: '16px Courier',
-    });
-    //  Whenever a data value is updated it will dispatch a changedata event
+    this.scoreboard.setText([
+      'Nombre:' + this.character.data.get('nombre'),
+      'Nivel: ' + this.character.data.get('nivel'),
+      'Pocision X: ' + this.character.data.get('xpos'),
+      'Pocision y: ' + this.character.data.get('ypos'),
+    ]);
 
-    this.scoreboard = {
-      'Posicion X': this.character.x,
-      'Posicion Y': this.character.y,
-    };
+    this.character.on('changedata-xpos', function () {});
+  }
+
+  actualizarScore() {
+    this.scoreboard.setText([
+      'Nombre:' + this.character.data.get('nombre'),
+      'Nivel: ' + this.character.data.get('nivel'),
+      'Pocision X: ' + this.character.x,
+      'Pocision y: ' + this.character.y,
+    ]);
   }
 
   update() {
@@ -499,20 +508,10 @@ class playGame extends Phaser.Scene {
     // } else if (this.cursors.down.isDown) {
     //   this.character.setVelocityY(300);
     // }
+    this.character.data.values.xpos = this.character.x;
+    this.character.data.values.ypos = this.character.y;
+    this.actualizarScore();
 
-    this.text.setText([
-      'Name: ' + 'Robot',
-      'Level: ' + 1,
-      'Value: ' + this.character.x,
-      'Owner: ' + this.character.y,
-    ]);
-
-    console.log(
-      'COORDENDAS MUÑECO',
-      Math.trunc(this.character.x),
-      Math.trunc(this.character.y),
-      this.points
-    );
     if (
       (this.pointsX.includes(Math.trunc(this.character.x)) &&
         this.pointsY.includes(Math.trunc(this.character.y)) &&
@@ -524,8 +523,6 @@ class playGame extends Phaser.Scene {
         this.pointsY.includes(Math.trunc(this.character.y) - 1) &&
         !this.detenido)
     ) {
-      console.log('DETENIDO', this.character.x, this.character.y);
-      console.log(this.points);
       this.character.pauseFollow();
       this.detenido = true;
     } else {
