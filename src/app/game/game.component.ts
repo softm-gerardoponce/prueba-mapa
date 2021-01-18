@@ -311,11 +311,11 @@ class playGame extends Phaser.Scene {
       if (h % 2 == 0) {
         new Phaser.Geom.Circle();
         this.circulos.push(
-          new Phaser.Geom.Circle(this.points[h].x, this.points[h].y, 4)
+          new Phaser.Geom.Circle(this.points[h].x, this.points[h].y, 1)
         );
       } else {
         this.circulos.push(
-          new Phaser.Geom.Circle(this.points[h].x, this.points[h].y, 4)
+          new Phaser.Geom.Circle(this.points[h].x, this.points[h].y, 1)
         );
       }
       graphics.fillCircleShape(this.circulos[h]);
