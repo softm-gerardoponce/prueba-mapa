@@ -9,7 +9,6 @@ import { getMainScene } from './scenes/main';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css'],
 })
-
 export class GameComponent implements OnInit {
   width: number = 640;
   height: number = 900;
@@ -17,11 +16,9 @@ export class GameComponent implements OnInit {
   config: Phaser.Types.Core.GameConfig;
   scene: Phaser.Scene;
 
-  @ViewChild('content') content:any;
+  @ViewChild('content') content: any;
 
-  constructor(
-    private modalService: NgbModal
-  ) {
+  constructor(private modalService: NgbModal) {
     this.config = {
       type: Phaser.AUTO,
       height: window.innerHeight,
@@ -53,15 +50,11 @@ export class GameComponent implements OnInit {
     this.game = new Phaser.Game(this.config);
   }
 
-  open(){
+  open() {
     this.modalService.open(this.content);
   }
 
-  initialized(){
-    console.log("Inicializado!")
+  initialized() {
+    console.log('Inicializado!');
   }
-
 }
-
-
-

@@ -7,15 +7,9 @@ import { Escena2Component } from './escena2/escena2.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    GameComponent,
-    Escena2Component
-  ],
-  imports: [
-    BrowserModule,
-  ],
+  declarations: [AppComponent, GameComponent, Escena2Component],
+  imports: [BrowserModule, NgbModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
