@@ -1,3 +1,5 @@
+import { Ball } from "../objects/ball";
+
 export class playLevel extends Phaser.Scene {
     constructor() {
       super({ key: 'playLevel' });
@@ -8,8 +10,16 @@ export class playLevel extends Phaser.Scene {
     }
   
     create() {
-      alert('escena de nivel');
-      this.add.image(0, 0, 'tecno').setOrigin();
+      //alert('escena de nivel');
+      //this.add.image(0, 0, 'tecno').setOrigin();
+
+      
+      var box = this.add.existing(new Ball(this, 200, 200, 'ball')) 
+
+      var box2 = this.add.existing(new Ball(this, 300, 200, 'ball')) 
+
+
+
     }
   
     update() {
