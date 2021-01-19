@@ -5,7 +5,7 @@ export class Stage extends Phaser.GameObjects.Image{
     public label = "";
     private status:number = 0;
 
-    constructor(scene, x, y, value, texture){
+    constructor(scene, x, y, texture){
 
         super(scene, x, y, texture);
 
