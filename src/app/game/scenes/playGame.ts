@@ -1,3 +1,4 @@
+import { Stage } from "../objects/stage";
 import { context } from "../services/context-manager";
 
 export class playGame extends Phaser.Scene {
@@ -44,7 +45,7 @@ export class playGame extends Phaser.Scene {
     detenido: boolean = false;
     pointsX: any = [];
     pointsY: any = [];
-  
+
     constructor() {
       super('PlayGame');
     }
@@ -60,7 +61,7 @@ export class playGame extends Phaser.Scene {
         frameWidth: 60,
         frameHeight: 60,
       });
-      this.load.image('ball', 'assets/sprites/shinyball.png');
+      this.load.image('ball', 'assets/shinyball.png');
       this.load.image('menu', 'assets/menu.png');
       this.load.image('levelpages', 'assets/levelpages.png');
       this.load.image('transp', 'assets/transp.png');
@@ -76,6 +77,9 @@ export class playGame extends Phaser.Scene {
         left: Phaser.Input.Keyboard.KeyCodes.A,
         right: Phaser.Input.Keyboard.KeyCodes.D,
       });
+
+  
+
       // this.character = this.physics.add.sprite(width / 2, height / 2, 'bot');
       // this.character.setDepth(1).setCollideWorldBounds(true).setInteractive();
       // console.log(this.cursors);
@@ -129,7 +133,7 @@ export class playGame extends Phaser.Scene {
         repeat: -1,
       });
       this.stars = [];
-      this.stars[0] = 0;
+      this.stars[0] = 1;
       this.canMove = true;
       this.itemGroup = this.add.group();
       for (
@@ -169,35 +173,22 @@ export class playGame extends Phaser.Scene {
             //var x = Phaser.Math.RND.between(0, width);
             //var y = Phaser.Math.RND.between(0, height);
             //this.thumb = this.add.image(x, y, 'levelthumb');
-            this.thumb = this.add.image(
-              k * width +
-                leftMargin +
-                i * (this.gameOptions.thumbWidth + this.gameOptions.spacing),
-              topMargin + j * (this.gameOptions.thumbHeight + 150),
-              'levelthumb'
-            );
-            this.thumb.setTint(this.gameOptions.colors[k]);
+
+            this.thumb = this.add.existing(new Stage(this, 
+                                            k * width +leftMargin + i * (this.gameOptions.thumbWidth + this.gameOptions.spacing),
+                                            topMargin + j * (this.gameOptions.thumbHeight + 200),
+                                            'levelthumb'));
+          
             this.thumb['levelNumber'] =
               k * (this.gameOptions.rows * this.gameOptions.columns) +
               j * this.gameOptions.columns +
               i;
             this.thumb['levelNumber'];
-            this.thumb.setFrame(
-              parseInt(this.stars[this.thumb['levelNumber']]) + 1
-            );
-            this.thumb.setInteractive();
-            this.itemGroup.add(this.thumb);
-            var levelText = this.add.text(
-              this.thumb.x,
-              this.thumb.y - 12,
-              this.thumb['levelNumber'] + 1,
-              {
-                font: '24px Arial',
-                color: '#000000',
-              }
-            );
-            levelText.setOrigin(0.5);
-            this.itemGroup.add(levelText);
+            this.thumb.setLabel(this.thumb['levelNumber'] + 1)
+            this.thumb.setStatus(parseInt(this.stars[this.thumb['levelNumber']]));
+
+            this.itemGroup.add(this.thumb)
+                          .add(this.thumb.label);            
           }
         }
         this.pageSelectors[k] = this.add.sprite(
