@@ -441,6 +441,50 @@ export class playGame extends Phaser.Scene {
     ]);
     //funcion que sirve para actualizar los valores cuando cambian
     this.character.on('changedata-xpos', function () {});
+
+    //BOTONES
+    var el = document.createElement('button');
+    el.innerHTML = 'PRUEBA';
+    el.setAttribute('class', 'btn btn-secondary mr-2');
+    el.setAttribute('placement', 'bottom');
+    el.setAttribute(
+      'ngbPopover',
+      'Vivamus sagittis lacus vel augue laoreet rutrum faucibus.'
+    );
+    el.setAttribute('popoverTitle', 'Popover on bottom');
+    el.setAttribute('trigger', 'focus');
+    el.setAttribute('type', 'button');
+    el.setAttribute('ng-reflect-placement', 'bottom');
+    el.setAttribute(
+      'ng-reflect-ngb-popover',
+      'Vivamus sagittis lacus vel augue laoreet rutrum faucibus'
+    );
+
+    el.setAttribute('ng-reflect-popover-title', 'Popover on bottom');
+
+    var inputDom = document.createElement('input');
+    var domInput = this.add.dom(500, 200, inputDom);
+
+    var domElement = this.add.dom(200, 200, el);
+    // var htmlString = `
+    // <button
+    // type="button"
+    // class="btn btn-secondary mr-2"
+    // placement="bottom"
+    // ngbPopover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+    // popoverTitle="Popover on bottom"
+    // trigger="focus"
+    // target="#myModal">
+    //   Popover on bottom
+    // </button>
+    // `;
+    // var domElement = this.add.dom(200, 200).createFromHTML(htmlString);
+    domElement.addListener('click');
+    domElement.on('click', function () {
+      console.log(inputDom.value);
+      console.log(domInput);
+      context.open();
+    });
   }
 
   actualizarScore() {

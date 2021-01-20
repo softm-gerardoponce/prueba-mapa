@@ -1,14 +1,17 @@
-<button class="btn btn-info" (click)="open()" hidden>Click</button>
 <button
   type="button"
-  class="btn btn-outline-secondary mr-2"
-  placement="bottom"
+  class="btn btn-secondary mr-2"
+  placement="top"
   ngbPopover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
   popoverTitle="Popover on bottom"
   trigger="focus"
+  hidden
 >
   Popover on bottom
 </button>
+<div id="gameContainer"></div>
+<button class="btn btn-info" (click)="open()" hidden>Click</button>
+
 <ng-template #content let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Prueba modal</h4>

@@ -27,6 +27,9 @@ export class GameComponent implements OnInit {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
       },
+      dom: {
+        createContainer: true,
+      },
       physics: {
         default: 'arcade',
       },
