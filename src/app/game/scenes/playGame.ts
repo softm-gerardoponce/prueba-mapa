@@ -453,17 +453,25 @@ export class playGame extends Phaser.Scene {
     );
     el.setAttribute('popoverTitle', 'Popover on bottom');
     el.setAttribute('trigger', 'focus');
-    el.setAttribute('type', 'button');
-    el.setAttribute('ng-reflect-placement', 'bottom');
-    el.setAttribute(
-      'ng-reflect-ngb-popover',
-      'Vivamus sagittis lacus vel augue laoreet rutrum faucibus'
-    );
 
-    el.setAttribute('ng-reflect-popover-title', 'Popover on bottom');
+    var popOver = document.createElement('button');
+    popOver.innerHTML = 'PRUEBA';
+    popOver.setAttribute('class', 'btn btn-secondary mr-2');
+    popOver.setAttribute('placement', 'bottom');
+    popOver.setAttribute(
+      'ngbPopover',
+      'Vivamus sagittis lacus vel augue laoreet rutrum faucibus.'
+    );
+    popOver.setAttribute('popoverTitle', 'Popover on bottom');
+    popOver.setAttribute('trigger', 'focus');
 
     var inputDom = document.createElement('input');
     var domInput = this.add.dom(500, 200, inputDom);
+    var popDom = this.add.dom(800, 200, popOver);
+    popDom.addListener('click');
+    popDom.on('click', function () {
+      alert('ds');
+    });
 
     var domElement = this.add.dom(200, 200, el);
     // var htmlString = `
@@ -483,7 +491,8 @@ export class playGame extends Phaser.Scene {
     domElement.on('click', function () {
       console.log(inputDom.value);
       console.log(domInput);
-      context.open();
+      //context.open();
+      console.log(el);
     });
   }
 
