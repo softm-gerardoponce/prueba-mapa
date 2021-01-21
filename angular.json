@@ -140,5 +140,8 @@
       }
     }
   },
-  "defaultProject": "itesm-dsl-webapp"
+  "defaultProject": "itesm-dsl-webapp",
+  "cli": {
+    "analytics": "d5c6bcda-92d7-40ee-9930-a3866b61c5d5"
+  }
 }

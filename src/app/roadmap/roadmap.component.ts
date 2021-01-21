@@ -3,11 +3,12 @@ import Phaser, { AUTO } from 'phaser';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 //import ScalePlugin from 'phaser3-rex-plugins/plugins/scale-plugin.js';
 import { getMainScene } from './scenes/main';
+import ScalePlugin from 'phaser3-rex-plugins/plugins/scale-plugin.js';
 
 @Component({
   selector: 'app-roadmap',
   templateUrl: './roadmap.component.html',
-  styleUrls: ['./roadmap.component.scss']
+  styleUrls: ['./roadmap.component.scss'],
 })
 export class RoadmapComponent implements OnInit {
   width: number = 640;
@@ -16,42 +17,36 @@ export class RoadmapComponent implements OnInit {
   config: Phaser.Types.Core.GameConfig;
   scene: Phaser.Scene | undefined;
 
+  @ViewChild('content') content: any;
 
-  @ViewChild('content') content:any;
-
-  constructor(
-    private modalService: NgbModal
-  ) {
+  constructor(private modalService: NgbModal) {
     this.config = {
       type: Phaser.AUTO,
-      
       scale: {
         mode: Phaser.Scale.FIT,
-        parent: 'phaser-example',
         autoCenter: Phaser.Scale.CENTER_BOTH,
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
       },
       physics: {
         default: 'arcade',
       },
       backgroundColor: '#000000',
       scene: getMainScene(this),
-      parent: 'gameContainer',
+      parent: 'phaser-game',
       audio: { noAudio: true },
       plugins: {
-        /*
         global: [
           {
             key: 'rexScale',
             plugin: ScalePlugin,
             start: true,
           },
-        ],*/
+        ],
       },
       dom: {
-        createContainer: true
-      }
+        createContainer: true,
+      },
     };
   }
 
@@ -59,12 +54,11 @@ export class RoadmapComponent implements OnInit {
     this.game = new Phaser.Game(this.config);
   }
 
-  open(){
+  open() {
     this.modalService.open(this.content);
   }
 
-  initialized(){
-    console.log("Inicializado!")
+  initialized() {
+    console.log('Inicializado!');
   }
-
 }
