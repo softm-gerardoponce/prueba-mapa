@@ -1,5 +1,6 @@
 import { context } from '../services/context-manager';
 import { Stage } from '../objects/stage';
+
 export class playGame extends Phaser.Scene {
   gameOptions = {
     colors: [0xffffff],
@@ -44,6 +45,7 @@ export class playGame extends Phaser.Scene {
   detenido: boolean = false;
   pointsX: any = [];
   pointsY: any = [];
+  coordenadas: any = [];
 
   constructor() {
     super('PlayGame');
@@ -67,8 +69,48 @@ export class playGame extends Phaser.Scene {
     this.load.atlas('bot', 'assets/running_bot.png', 'assets/running_bot.json');
   }
 
+  crearPuntos(width, height) {
+    console.log(width, height);
+    this.coordenadas = [
+      {
+        x: Phaser.Math.RND.between(width * 0.1, width * 0.2),
+        y: Phaser.Math.RND.between(height * 0.3, height * 0.35),
+      },
+      {
+        x: Phaser.Math.RND.between(width * 0.4, width * 0.45),
+        y: Phaser.Math.RND.between(height * 0.25, height * 0.3),
+      },
+      {
+        x: Phaser.Math.RND.between(width * 0.7, width * 0.75),
+        y: Phaser.Math.RND.between(height * 0.3, height * 0.35),
+      },
+      {
+        x: Phaser.Math.RND.between(width * 0.8, width * 0.85),
+        y: Phaser.Math.RND.between(height * 0.5, height * 0.55),
+      },
+      {
+        x: Phaser.Math.RND.between(width * 0.7, width * 0.75),
+        y: Phaser.Math.RND.between(height * 0.8, height * 0.85),
+      },
+      {
+        x: Phaser.Math.RND.between(width * 0.5, width * 0.55),
+        y: Phaser.Math.RND.between(height * 0.6, height * 0.65),
+      },
+      {
+        x: Phaser.Math.RND.between(width * 0.2, width * 0.25),
+        y: Phaser.Math.RND.between(height * 0.6, height * 0.65),
+      },
+      {
+        x: Phaser.Math.RND.between(width * 0.4, width * 0.45),
+        y: Phaser.Math.RND.between(height * 0.8, height * 0.85),
+      },
+    ];
+  }
+
   create() {
     let { width, height } = this.sys.game.canvas;
+    this.crearPuntos(width, height);
+    console.log(this.coordenadas);
     this.cameras.main.setBounds(0, 0, width, height);
     this.cursors = this.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -129,7 +171,7 @@ export class playGame extends Phaser.Scene {
       repeat: -1,
     });
     this.stars = [];
-    this.stars[0] = 0;
+    this.stars[0] = 3;
     this.canMove = true;
     this.itemGroup = this.add.group();
     for (
@@ -164,41 +206,31 @@ export class playGame extends Phaser.Scene {
     var topMargin = (height - colHeight) / 2 + this.gameOptions.thumbHeight / 2;
 
     for (var k = 0; k < this.gameOptions.colors.length; k++) {
-      for (var i = 0; i < this.gameOptions.columns; i++) {
-        for (var j = 0; j < this.gameOptions.rows; j++) {
-          //var x = Phaser.Math.RND.between(0, width);
-          //var y = Phaser.Math.RND.between(0, height);
-          //this.thumb = this.add.image(x, y, 'levelthumb');
-          this.thumb = this.add.image(
-            k * width +
-              leftMargin +
-              i * (this.gameOptions.thumbWidth + this.gameOptions.spacing),
-            topMargin + j * (this.gameOptions.thumbHeight + 150),
-            'levelthumb'
-          );
-          this.thumb.setTint(this.gameOptions.colors[k]);
-          this.thumb['levelNumber'] =
-            k * (this.gameOptions.rows * this.gameOptions.columns) +
-            j * this.gameOptions.columns +
-            i;
-          this.thumb['levelNumber'];
-          this.thumb.setFrame(
-            parseInt(this.stars[this.thumb['levelNumber']]) + 1
-          );
-          this.thumb.setInteractive();
-          this.itemGroup.add(this.thumb);
-          var levelText = this.add.text(
-            this.thumb.x,
-            this.thumb.y - 12,
-            this.thumb['levelNumber'] + 1,
-            {
-              font: '24px Arial',
-              color: '#000000',
-            }
-          );
-          levelText.setOrigin(0.5);
-          this.itemGroup.add(levelText);
-        }
+      for (var i = 0; i < this.coordenadas.length; i++) {
+        this.thumb = this.add.image(
+          this.coordenadas[i].x,
+          this.coordenadas[i].y,
+          'levelthumb'
+        );
+        this.thumb.setTint(this.gameOptions.colors[k]);
+        this.thumb['levelNumber'] = i;
+        this.thumb['levelNumber'];
+        this.thumb.setFrame(
+          parseInt(this.stars[this.thumb['levelNumber']]) + 1
+        );
+        this.thumb.setInteractive();
+        this.itemGroup.add(this.thumb);
+        var levelText = this.add.text(
+          this.thumb.x,
+          this.thumb.y - 12,
+          this.thumb['levelNumber'] + 1,
+          {
+            font: '24px Arial',
+            color: '#000000',
+          }
+        );
+        levelText.setOrigin(0.5);
+        this.itemGroup.add(levelText);
       }
       this.pageSelectors[k] = this.add.sprite(
         width / 2 +
@@ -230,7 +262,9 @@ export class playGame extends Phaser.Scene {
 
     var par: boolean = true;
     var conta = 0;
-    var path = new Phaser.Curves.Path(0, 0);
+    var comienzoY = height / 2;
+    var comienxoX = 0;
+    var path = new Phaser.Curves.Path(comienxoX, comienzoY);
     for (let item of this.itemGroup.getChildren()) {
       if (par && conta < 16) {
         //console.log(item.x, item.y); // "Cat", "Dog", "Hamster"
@@ -246,7 +280,7 @@ export class playGame extends Phaser.Scene {
 
     path.draw(graphics, 328); //what is 328
 
-    this.character = this.add.follower(path, 0, 0, 'bot');
+    this.character = this.add.follower(path, comienxoX, comienzoY, 'bot');
     this.character.startFollow({
       duration: 16000,
       yoyo: true,
@@ -275,7 +309,7 @@ export class playGame extends Phaser.Scene {
       graphics.fillCircleShape(this.circulos[h]);
       console.log('x', this.points[h].x, 'y', this.points[h].y);
     }
-    // console.log('tasda', this.itemGroup.children);
+
     /// SECCION: INPUTS EVENTOS
 
     this.input.on(
@@ -449,23 +483,23 @@ export class playGame extends Phaser.Scene {
     el.setAttribute('type', 'button');
 
     var inputDom = document.createElement('input');
-    var domInput = this.add.dom(500, 200, inputDom);
+    //var domInput = this.add.dom(500, 200, inputDom);
 
-    var domElement = this.add.dom(200, 200, el);
-    domElement.addListener('click');
-    domElement.on('click', function () {
-      console.log(inputDom.value);
-      console.log(domInput);
-      context.open();
-    });
+    //var domElement = this.add.dom(200, 200, el);
+    //domElement.addListener('click');
+    // domElement.on('click', function () {
+    //   console.log(inputDom.value);
+    //   console.log(domInput);
+    //   context.open();
+    // });
   }
 
   actualizarScore() {
     this.scoreboard.setText([
       'Nombre: ' + this.character.data.get('nombre'),
       'Nivel: ' + this.character.data.get('nivel'),
-      'Pocision X: ' + this.character.x,
-      'Pocision y: ' + this.character.y,
+      'Pocision X: ' + Math.floor(this.character.x),
+      'Pocision y: ' + Math.floor(this.character.y),
     ]);
   }
 
