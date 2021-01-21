@@ -26,7 +26,6 @@ export class playGame extends Phaser.Scene {
   thumb: any;
 
   scoreboard: any;
-  dataScore: any;
   circulos: any = [];
 
   obj: any = undefined;
@@ -38,10 +37,8 @@ export class playGame extends Phaser.Scene {
   desplegado: boolean = false;
 
   text: any;
-  contadorNiveles: number = 0;
 
   points: any = [];
-  bmd: any;
   detenido: boolean = false;
   pointsX: any = [];
   pointsY: any = [];
@@ -85,7 +82,7 @@ export class playGame extends Phaser.Scene {
         y: Phaser.Math.RND.between(height * 0.3, height * 0.35),
       },
       {
-        x: Phaser.Math.RND.between(width * 0.8, width * 0.85),
+        x: Phaser.Math.RND.between(width * 0.9, width * 0.925),
         y: Phaser.Math.RND.between(height * 0.5, height * 0.55),
       },
       {
@@ -112,17 +109,6 @@ export class playGame extends Phaser.Scene {
     this.crearPuntos(width, height);
     console.log(this.coordenadas);
     this.cameras.main.setBounds(0, 0, width, height);
-    this.cursors = this.input.keyboard.addKeys({
-      up: Phaser.Input.Keyboard.KeyCodes.W,
-      down: Phaser.Input.Keyboard.KeyCodes.S,
-      left: Phaser.Input.Keyboard.KeyCodes.A,
-      right: Phaser.Input.Keyboard.KeyCodes.D,
-    });
-    // this.character = this.physics.add.sprite(width / 2, height / 2, 'bot');
-    // this.character.setDepth(1).setCollideWorldBounds(true).setInteractive();
-    // console.log(this.cursors);
-    // this.cameras.main.startFollow(this.character, true, 0.09, 0.09);
-    //this.cameras.main.setZoom(1.5);
     this.anims.create({
       key: 'run',
       frames: [
@@ -230,7 +216,7 @@ export class playGame extends Phaser.Scene {
           }
         );
         levelText.setOrigin(0.5);
-        this.itemGroup.add(levelText);
+        this.itemGroup.add(levelText).setDepth(5);
       }
       this.pageSelectors[k] = this.add.sprite(
         width / 2 +
@@ -276,11 +262,13 @@ export class playGame extends Phaser.Scene {
     path.splineTo(this.points);
     var graphics = this.add.graphics();
 
-    graphics.lineStyle(1, 0xffffff, 1); //what is 1, , 1
+    graphics.lineStyle(10, 0x0000ff, 1);
 
-    path.draw(graphics, 328); //what is 328
+    path.draw(graphics, 328).setDepth(1);
 
-    this.character = this.add.follower(path, comienxoX, comienzoY, 'bot');
+    this.character = this.add
+      .follower(path, comienxoX, comienzoY, 'bot')
+      .setDepth(10);
     this.character.startFollow({
       duration: 16000,
       yoyo: true,
@@ -291,9 +279,6 @@ export class playGame extends Phaser.Scene {
     this.character.play('run');
     //this.cameras.main.setZoom(1.5);
     console.log('puntos', this.points[0].x);
-
-    this.pointsX = this.points.map((a) => a.x);
-    this.pointsY = this.points.map((a) => a.y);
 
     for (var h = 0; h < this.points.length; h++) {
       if (h % 2 == 0) {
