@@ -1,0 +1,26 @@
+canvas {
+    margin: 0 auto;
+  }
+
+.gui-info{
+    background-color: white;
+    margin-left: -0.5cm;
+    padding-left: 1cm;
+    padding-right: 1cm;
+    font-size: large;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: black;
+    border-radius: 20px;
+}
+
+.image{
+    width: 60px;
+    height: 60px;
+    top: -15px;
+    left: -25px;
+    position: absolute;
+}
+
+.gui{
+    width: 500px;
+}

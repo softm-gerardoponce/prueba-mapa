@@ -1,0 +1,8 @@
+<p>test works!</p>
+
+<input type="text"[(ngModel)]="petId">
+<button class="btn-dark" (click)="getPet(petId);">Get</button>
+
+<p *ngIf="$pet | async as pet">
+    {{ pet.category?.name}}
+</p>
