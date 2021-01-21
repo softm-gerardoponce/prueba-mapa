@@ -1,0 +1,38 @@
+<button class="btn btn-info" (click)="open()" hidden>Click</button>
+<ng-template  #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Prueba modal Bootstrap</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group">
+          <label>Prueba</label>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    </div>
+  </ng-template>
+
+  <div hidden class="col row m-4" style="position:absolute;">
+    <div class="col-md-3">
+      <img src="/assets/user.png" class="image"/>
+      <label class="gui-info">Nombre del Jugador</label>
+    </div>
+    <div class="col-md-3">
+      <img src="/assets/points.png" class="image"/>
+      <label class="gui-info">1500</label>
+    </div>
+    <div class="col-md-3">
+      <img src="/assets/stage.png" class="image"/>
+      <label class="gui-info">3/8</label>
+    </div>
+    <div class="col-md-3">
+      <img src="/assets/leaderboard.png" class="image"/>
+      <label class="gui-info">37 th</label>
+    </div>
+  </div>
