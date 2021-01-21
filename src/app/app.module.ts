@@ -11,24 +11,29 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { ApiModule, Configuration } from 'src/pet-client';
 import { ErrorHandlerInterceptor } from './interceptors/error-handler.interceptor';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
+import { QuillModule } from 'ngx-quill';
+import { DetalleEtapaModalComponent } from './components/detalle-etapa-modal/detalle-etapa-modal.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     RoadmapComponent,
-    TestComponent
+    TestComponent,
+    DetalleEtapaModalComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    QuillModule.forRoot(),
     ToastrModule.forRoot(),
     MDBBootstrapModule.forRoot(),
     ApiModule.forRoot(apiConfiguration),
     HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [
     {

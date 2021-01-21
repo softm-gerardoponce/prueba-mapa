@@ -1,26 +1,27 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import Phaser, { AUTO } from 'phaser';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { DetalleEtapaModalComponent } from '../components/detalle-etapa-modal/detalle-etapa-modal.component';
 //import ScalePlugin from 'phaser3-rex-plugins/plugins/scale-plugin.js';
 import { getMainScene } from './scenes/main';
+
 
 @Component({
   selector: 'app-roadmap',
   templateUrl: './roadmap.component.html',
-  styleUrls: ['./roadmap.component.scss']
+  styleUrls: ['./roadmap.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class RoadmapComponent implements OnInit {
+
+  @ViewChild('content') modal: DetalleEtapaModalComponent;
+
   width: number = 640;
   height: number = 900;
   game: Phaser.Game | undefined;
   config: Phaser.Types.Core.GameConfig;
   scene: Phaser.Scene | undefined;
 
-
-  @ViewChild('content') content:any;
-
   constructor(
-    private modalService: NgbModal
   ) {
     this.config = {
       type: Phaser.AUTO,
@@ -60,7 +61,7 @@ export class RoadmapComponent implements OnInit {
   }
 
   open(){
-    this.modalService.open(this.content);
+    this.modal.open();
   }
 
   initialized(){
