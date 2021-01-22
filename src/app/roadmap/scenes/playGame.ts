@@ -1,5 +1,6 @@
 import { context } from '../services/context-manager';
 import { Stage } from '../objects/stage';
+import { PopOver } from '../objects/popOver';
 
 export class playGame extends Phaser.Scene {
   gameOptions = {
@@ -64,6 +65,7 @@ export class playGame extends Phaser.Scene {
     this.load.image('levelpages', 'assets/levelpages.png');
     this.load.image('transp', 'assets/transp.png');
     this.load.atlas('bot', 'assets/running_bot.png', 'assets/running_bot.json');
+
   }
 
   crearPuntos(width, height) {
@@ -105,6 +107,10 @@ export class playGame extends Phaser.Scene {
   }
 
   create() {
+    let popOver = this.add.existing(new PopOver(this, 0, 0));
+
+    let etapas = context.getStages();
+
     let { width, height } = this.sys.game.canvas;
     this.crearPuntos(width, height);
     console.log(this.coordenadas);
@@ -205,6 +211,15 @@ export class playGame extends Phaser.Scene {
           parseInt(this.stars[this.thumb['levelNumber']]) + 1
         );
         this.thumb.setInteractive();
+
+        this.thumb.on('pointerover', function (pointer) {
+          popOver.show("PopOver", pointer.x+50, pointer.y);                
+        });
+        
+        this.thumb.on('pointerout', function (pointer) {
+          popOver.hide();                
+        });
+
         this.itemGroup.add(this.thumb);
         var levelText = this.add.text(
           this.thumb.x,
@@ -491,6 +506,7 @@ export class playGame extends Phaser.Scene {
   update() {
     this;
     this.actualizarScore();
+
 
     if (
       Phaser.Geom.Circle.ContainsPoint(

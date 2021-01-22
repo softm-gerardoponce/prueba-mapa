@@ -66,6 +66,64 @@ export class RoadmapComponent implements OnInit {
 
   }
 
+  getStages(){
+    return [
+      {
+        id:0,
+        etapa:"Introducción",
+        instrucciones: "Instrucciones 1",
+        estatus:"activo"
+      },{
+        id:1,
+        etapa:"Capítulo 1",
+        instrucciones: "Instrucciones 2",
+        estatus:"activo"
+      },
+      {
+        id:2,
+        etapa:"Capítulo 2",
+        instrucciones: "Instrucciones 3",
+        estatus:"activo"
+      },
+      {
+        id:2,
+        etapa:"Capítulo 3",
+        instrucciones: "Instrucciones 3",
+        estatus:"activo"
+      },
+      {
+        id:2,
+        etapa:"Capítulo 4",
+        instrucciones: "Instrucciones 3",
+        estatus:"activo"
+      },
+      {
+        id:2,
+        etapa:"Capítulo 5",
+        instrucciones: "Instrucciones 3",
+        estatus:"activo"
+      },
+      {
+        id:2,
+        etapa:"Capítulo 6",
+        instrucciones: "Instrucciones 3",
+        estatus:"activo"
+      },
+      {
+        id:2,
+        etapa:"Capítulo 7",
+        instrucciones: "Instrucciones 3",
+        estatus:"activo"
+      },
+      {
+        id:2,
+        etapa:"Capítulo 8",
+        instrucciones: "Instrucciones 3",
+        estatus:"activo"
+      },
+    ]
+  }
+
   initialized() {
     console.log('Inicializado!');
   }
