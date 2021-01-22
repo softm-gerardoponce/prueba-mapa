@@ -16,6 +16,8 @@ import { ToastrModule } from 'ngx-toastr';
 import { QuillModule } from 'ngx-quill';
 import { DetalleEtapaModalComponent } from './components/detalle-etapa-modal/detalle-etapa-modal.component';
 import { LoginComponent } from './components/login/login.component';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { FullLayoutComponent } from './components/full-layout/full-layout.component';
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import { LoginComponent } from './components/login/login.component';
     RoadmapComponent,
     TestComponent,
     DetalleEtapaModalComponent,
-    LoginComponent
+    LoginComponent,
+    NavBarComponent,
+    FullLayoutComponent
     ],
   imports: [
     BrowserModule,
