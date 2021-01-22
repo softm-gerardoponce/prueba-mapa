@@ -1,39 +1,38 @@
-import { setContext } from "../services/context-manager";
-import { playGame } from "./playGame";
-import { playLevel } from "./playLevel";
-
+import { setContext } from '../services/context-manager';
+import { playGame } from './playGame';
+import { playLevel } from './playLevel';
 
 const SCENES = {
-    FIRST: 'playGame',
-    SECOND: 'playLevel'
-  }
+  FIRST: 'playGame',
+  SECOND: 'playLevel',
+};
 
 export class MainScene extends Phaser.Scene {
-    constructor() {
-      super({ key: 'main' });
-    }
+  constructor() {
+    super({ key: 'main' });
+  }
 
-    create() {
-        console.log('create method');
-        this.scene.add(SCENES.FIRST, playGame, true);
-        this.scene.add(SCENES.SECOND, playLevel, true);    
-        this.scene.run(SCENES.FIRST);
-    }
+  create() {
+    // console.log('create method');
+    this.scene.add(SCENES.FIRST, playGame, true);
+    this.scene.add(SCENES.SECOND, playLevel, true);
+    this.scene.run(SCENES.FIRST);
+  }
 
-    runScene(){
-        this.scene.run(SCENES.SECOND)
-    }
+  runScene() {
+    this.scene.run(SCENES.SECOND);
+  }
 
-    preload() {
-      console.log('preload method');
-    }
-    
-    update() {
-      console.log('update method');
-    }
+  preload() {
+    // console.log('preload method');
+  }
+
+  update() {
+    // console.log('update method');
+  }
 }
 
 export const getMainScene = (ctx: any) => {
-    setContext(ctx);
-    return MainScene;
-  }
+  setContext(ctx);
+  return MainScene;
+};
