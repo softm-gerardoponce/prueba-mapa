@@ -1,0 +1,46 @@
+<div class="container mt-5" id="container" [ngClass]="{'right-panel-active': signUp}">
+    <div class="form-container sign-up-container mt-2">
+      <form action="#">
+        <h1 class="font-weight-bold">Create Account</h1>
+        <div class="social-container">
+          <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+          <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <input type="text" [(ngModel)]="signUpForm.usuario" [ngModelOptions]="{standalone: true}" placeholder="Name" />
+        <input type="email" [(ngModel)]="signUpForm.correo" [ngModelOptions]="{standalone: true}" placeholder="Email" />
+        <input type="password" [(ngModel)]="signUpForm.contrasena" [ngModelOptions]="{standalone: true}" placeholder="Password" />
+        <button mdbBtn class="btn btn-info btn-rounded" (click)="onSignUp()">Sign up</button>
+      </form>
+    </div>
+
+    <div class="form-container sign-in-container">
+      <form action="#">
+        <h1 class="font-weight-bold">Iniciar sesión</h1>
+        <div class="social-container">
+          <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+          <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <span>or use your account</span>
+        <input type="email" [(ngModel)]="signInForm.usuario" [ngModelOptions]="{standalone: true}" placeholder="Email" />
+        <input type="password" [(ngModel)]="signInForm.contrasena" [ngModelOptions]="{standalone: true}" placeholder="Password" />
+        <button mdbBtn class="btn btn-info btn-rounded" (click)="onSignIn()">Iniciar sesión</button>
+      </form>
+    </div>
+
+    <div class="overlay-container">
+      <div class="overlay">
+        <div class="overlay-panel overlay-left">
+          <h1 class="font-weight-bold">Good to see you!</h1>
+          <p>¿Ya tienes cuenta? <br>Inicia sesión</p>
+          <button mdbBtn class="btn btn-outline-white btn-rounded" id="signIn" (click)="changeClass()">Iniciar sesión</button>
+        </div>
+        <div class="overlay-panel overlay-right">
+          <h1 class="font-weight-bold">Hello, Friend!</h1>
+          <p>You don't have account yet? Don't worry! You still can join us</p>
+          <button mdbBtn class="btn btn-outline-white btn-rounded" id="signUp" (click)="changeClass()">Registrarse</button>
+        </div>
+      </div>
+    </div>
+</div>
