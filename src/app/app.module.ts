@@ -15,6 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { QuillModule } from 'ngx-quill';
 import { DetalleEtapaModalComponent } from './components/detalle-etapa-modal/detalle-etapa-modal.component';
+import { LoginComponent } from './components/login/login.component';
 
 
 @NgModule({
@@ -22,8 +23,9 @@ import { DetalleEtapaModalComponent } from './components/detalle-etapa-modal/det
     AppComponent,
     RoadmapComponent,
     TestComponent,
-    DetalleEtapaModalComponent
-  ],
+    DetalleEtapaModalComponent,
+    LoginComponent
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
