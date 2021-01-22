@@ -40,8 +40,6 @@ export class playGame extends Phaser.Scene {
 
   points: any = [];
   detenido: boolean = false;
-  pointsX: any = [];
-  pointsY: any = [];
   coordenadas: any = [];
 
   constructor() {
