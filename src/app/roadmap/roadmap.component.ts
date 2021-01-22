@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import Phaser, { AUTO } from 'phaser';
 import { DetalleEtapaModalComponent } from '../components/detalle-etapa-modal/detalle-etapa-modal.component';
 //import ScalePlugin from 'phaser3-rex-plugins/plugins/scale-plugin.js';
@@ -13,7 +13,7 @@ import ScalePlugin from 'phaser3-rex-plugins/plugins/scale-plugin.js';
   encapsulation: ViewEncapsulation.None,
 
 })
-export class RoadmapComponent implements OnInit {
+export class RoadmapComponent implements OnInit, OnDestroy{
 
   @ViewChild('content') modal: DetalleEtapaModalComponent;
 
@@ -55,6 +55,9 @@ export class RoadmapComponent implements OnInit {
         createContainer: true,
       },
     };
+  }
+  ngOnDestroy(): void {
+    this.game.destroy(true);
   }
 
   ngOnInit() {

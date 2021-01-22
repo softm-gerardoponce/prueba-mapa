@@ -7,10 +7,7 @@ import { RoadmapComponent } from './roadmap/roadmap.component';
 import { TestComponent } from './test/test.component';
 
 const routes: Routes = [
-  {
-    component:RoadmapComponent,
-    path:''
-  },
+ 
   {
     component:LoginComponent,
     path:'login'

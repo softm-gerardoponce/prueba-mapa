@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +28,9 @@ export class LoginComponent implements OnInit {
 
   signUp:boolean=false;
 
-  constructor() { }
+  constructor(
+    private router:Router
+  ) { }
 
 
   changeClass(){
@@ -40,6 +43,7 @@ export class LoginComponent implements OnInit {
 
   onSignIn(){
     console.log(this.signInForm)
+    this.router.navigate(['/layout/map'])
   }
 
   onSignUp(){
