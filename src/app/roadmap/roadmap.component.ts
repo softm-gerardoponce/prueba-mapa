@@ -3,6 +3,7 @@ import Phaser, { AUTO } from 'phaser';
 import { DetalleEtapaModalComponent } from '../components/detalle-etapa-modal/detalle-etapa-modal.component';
 //import ScalePlugin from 'phaser3-rex-plugins/plugins/scale-plugin.js';
 import { getMainScene } from './scenes/main';
+import ScalePlugin from 'phaser3-rex-plugins/plugins/scale-plugin.js';
 
 
 @Component({
@@ -10,6 +11,7 @@ import { getMainScene } from './scenes/main';
   templateUrl: './roadmap.component.html',
   styleUrls: ['./roadmap.component.scss'],
   encapsulation: ViewEncapsulation.None,
+
 })
 export class RoadmapComponent implements OnInit {
 
@@ -21,38 +23,37 @@ export class RoadmapComponent implements OnInit {
   config: Phaser.Types.Core.GameConfig;
   scene: Phaser.Scene | undefined;
 
+
   constructor(
   ) {
+
     this.config = {
       type: Phaser.AUTO,
-      
       scale: {
         mode: Phaser.Scale.FIT,
-        parent: 'phaser-example',
         autoCenter: Phaser.Scale.CENTER_BOTH,
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
       },
       physics: {
         default: 'arcade',
       },
       backgroundColor: '#000000',
       scene: getMainScene(this),
-      parent: 'gameContainer',
+      parent: 'phaser-game',
       audio: { noAudio: true },
       plugins: {
-        /*
         global: [
           {
             key: 'rexScale',
             plugin: ScalePlugin,
             start: true,
           },
-        ],*/
+        ],
       },
       dom: {
-        createContainer: true
-      }
+        createContainer: true,
+      },
     };
   }
 
@@ -62,10 +63,10 @@ export class RoadmapComponent implements OnInit {
 
   open(){
     this.modal.open();
+
   }
 
-  initialized(){
-    console.log("Inicializado!")
+  initialized() {
+    console.log('Inicializado!');
   }
-
 }
