@@ -12,10 +12,6 @@ const routes: Routes = [
     path:''
   },
   {
-    component:TestComponent,
-    path:'test'
-  },
-  {
     component:LoginComponent,
     path:'login'
   },
@@ -25,6 +21,17 @@ const routes: Routes = [
   },
   {
     component:FullLayoutComponent,
+    children:[
+      {
+        component:TestComponent,
+        path:'test'
+      },
+      {
+        component:RoadmapComponent,
+        path:'map'
+      },
+      
+    ],
     path:'layout'
   },
 ];
